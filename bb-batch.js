@@ -13,7 +13,7 @@ panel.style.cssText='position:fixed;top:16px;right:16px;z-index:99999;background
 document.body.appendChild(panel);
 var i=0,dl=0,sk=0,all=[];
 function render(m){panel.innerHTML='<b style="color:#009b8d">BB Batch Download</b><br>'+m+'<br><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><small style="color:#888">'+i+' of '+accts.length+' | '+dl+' downloaded | '+sk+' empty</small>';}
-function setAcct(g){var p=hdn.value.split('\u00bb');var c=p[1].split('\u00a7');c[5]=g;p[1]=c.join('\u00a7');hdn.value=p.join('\u00bb');}
+function selectAcct(guid,cb){var status=document.getElementById('cboStatus');var trigger=status?status.parentElement:null;if(!trigger){cb();return;}trigger.click();var tries=0;var t=setInterval(function(){tries++;var li=document.querySelector('li[data-value="'+guid+'"]');if(li){clearInterval(t);li.click();setTimeout(cb,400);}else if(tries>15){clearInterval(t);cb();}},200);}
 function getRows(name){
 var rows=document.querySelectorAll('tr.DataRow');
 if(!rows.length)return[];
@@ -33,12 +33,13 @@ render(all.length>0?'&#x2705; Done &mdash; combined file downloaded.':'&#x2705; 
 window._bbBatchRunning=false;setTimeout(function(){panel.remove();},6000);return;}
 var ac=accts[i];
 render('&#x23F3; <b>'+ac.text+'</b>');
-setAcct(ac.value);
+selectAcct(ac.value,function(){
 var lb=hdn.value.length;
 doReportPreview();
 waitAndGo(lb,function(has){
 if(has){var rows=getRows(ac.text);if(rows.length>0){dl++;all=all.concat(rows);}else{sk++;}}else{sk++;}
 i++;setTimeout(next,700);});
+});
 }
 next();
 })();
