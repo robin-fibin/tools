@@ -13,7 +13,7 @@ panel.style.cssText='position:fixed;top:16px;right:16px;z-index:99999;background
 document.body.appendChild(panel);
 var i=0,dl=0,sk=0,failed=[],all=[];
 function render(m){panel.innerHTML='<b style="color:#009b8d">BB Batch Download</b><br>'+m+'<br><hr style="border:none;border-top:1px solid #eee;margin:8px 0"><small style="color:#888">'+i+' of '+accts.length+' | '+dl+' downloaded | '+sk+' empty | '+failed.length+' failed</small>';}
-function selectAcct(guid,cb){var li=document.querySelector('li[data-value="'+guid+'"]');if(li){li.click();setTimeout(cb,500);}else{cb();}}
+function selectAcct(guid,cb){var ul=document.getElementById('cboStatus_Contener');var wrapper=ul?ul.parentElement:null;if(wrapper){wrapper.click();}setTimeout(function(){var li=document.querySelector('li[data-value="'+guid+'"]');if(li){['mousedown','mouseup','click'].forEach(function(e){li.dispatchEvent(new MouseEvent(e,{bubbles:true,cancelable:true}));});setTimeout(cb,600);}else{cb();}},500);}
 function getRows(name){
 var rows=document.querySelectorAll('tr.DataRow');
 if(!rows.length)return[];
